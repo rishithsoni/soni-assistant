@@ -44,39 +44,47 @@ if user_name == "seema":
                               {"role": "user", "content": f"Give a positive daily prediction for {selected_rashi}."}]
                 )
                 st.markdown(astro_res.choices[0].message.content)
-# 3. --- MAHA-JYOTISH AI (Technical Vedic Analysis) ---
-    with st.expander("☸️ Maha-Vedic AI (Nakshatra & Grah Analysis)"):
-        p_name = st.text_input("Name for deep analysis:")
-        p_dob = st.date_input("Date of Birth:", value=datetime.date(2000, 1, 1), key="deep_astro")
+# 3. --- SONI-STYLE DEEP JYOTISH (Time & Place Added) ---
+    with st.expander("☸️ Maha-Vedic AI (Precise Analysis)"):
+        p_name = st.text_input("Name:")
+        col1, col2 = st.columns(2)
         
-        if st.button("Calculate Maha-Kundli"):
+        with col1:
+            p_dob = st.date_input("Date of Birth:", value=datetime.date(2000, 1, 1), key="final_date")
+        with col2:
+            p_tob = st.time_input("Time of Birth:", value=datetime.time(12, 0), key="final_time")
+            
+        p_place = st.text_input("Birth Place (City/State):", "Meerut, UP")
+        
+        if st.button("Calculate Real Kundli"):
             if p_name:
-                with st.spinner(f"Calculating Nakshatras for {p_name}..."):
-                    maha_prompt = f"""
-                    You are an expert Vedic Astrologer specializing in Nakshatras and planetary degrees.
-                    Analyze the birth date {p_dob} for {p_name}. 
-                    Provide a RAW and REAL technical report in Hinglish:
-                    
-                    1. **Nakshatra & Pada:** Identify the likely Nakshatra and its 1-4 Pada based on the date.
-                    2. **Rashi Lord (Lagan):** Who is the ruling planet and how is it behaving?
-                    3. **Grah Dasha:** Mention the current likely Mahadasha influence (e.g., Rahu-Kaal or Shani-Dhaiya).
-                    4. **The Shadow (Dosha):** Mention any Mangal, Kaal Sarp, or Pitra Dosha vibes.
-                    5. **Career & Money:** Real talk—will they be rich or struggle? Leader or worker?
-                    6. **Upay (Remedy):** A specific ritual or stone based on their Nakshatra.
+                with st.spinner(f"Mapping the sky for {p_name}..."):
+                    style_prompt = f"""
+                    You are a Master Vedic Astrologer. Analyze the following birth data:
+                    Name: {p_name}
+                    DOB: {p_dob}
+                    Time: {p_tob}
+                    Place: {p_place}
+
+                    Provide a RAW, TECHNICAL report in WhatsApp-style Hinglish:
+                    1. **Lagna (Ascendant):** Calculate the Lagna based on the time. How does it affect their personality?
+                    2. **Nakshatra & Charan:** Which of the 27 Nakshatras and which Charan (1-4)? 
+                    3. **Grah ki Sthiti:** Which planet is 'Uch' (Exalted) or 'Neech' (Debilitated)?
+                    4. **The Reality Check:** What is the one big mistake this person makes repeatedly? (Be blunt).
+                    5. **Mahadasha:** What period are they likely running right now?
+                    6. **Soni's Advice:** A practical, raw remedy. No sugar-coating.
                     """
                     
                     res = client.chat.completions.create(
                         model="llama-3.1-8b-instant",
                         messages=[
-                            {"role": "system", "content": "You are a professional Maha-Jyotish. You use technical Vedic terms like Ashwini, Rohini, Revati, etc. You tell the raw truth."},
-                            {"role": "user", "content": maha_prompt}
+                            {"role": "system", "content": "You are a blunt, high-level Vedic Expert. You use technical terms but speak in cool, natural Hinglish."},
+                            {"role": "user", "content": style_prompt}
                         ]
                     )
                     st.divider()
-                    st.subheader(f"🚩 Maha-Analysis: {p_name}")
+                    st.subheader(f"🚩 Technical Patrika: {p_name}")
                     st.markdown(res.choices[0].message.content)
-        
-            else:
                 st.warning("Please enter a name first!")
 
 elif user_name == "meet":
@@ -158,6 +166,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
