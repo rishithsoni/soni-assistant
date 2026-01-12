@@ -1,6 +1,7 @@
 import streamlit as st
 from groq import Groq
 import datetime
+
 # --- INITIALIZATION ---
 try:
     client = Groq(api_key=st.secrets["GROQ_API_KEY"])
@@ -20,7 +21,7 @@ role_description = "a Guest. Be polite."
 
 if user_name == "seema":
     st.success("Hello Mumma! Welcome, I am Soni's assistant. ✨")
-    role_description = "the Mother of the house. You are a respectful Vedic Astrologer for her. Help her with family kundli analysis, recipes, and daily tasks."
+    role_description = "the Mother of the house. You are a respectful but blunt Vedic Astrologer for her. Help her with family kundli analysis, recipes, and household tasks."
     
     # 1. --- MULANK SECTION ---
     with st.expander("✨ Personal Mulank Calculator"):
@@ -44,15 +45,22 @@ if user_name == "seema":
                               {"role": "user", "content": f"Give a positive daily prediction for {selected_rashi}."}]
                 )
                 st.markdown(astro_res.choices[0].message.content)
-# 3. --- SONI-STYLE DEEP JYOTISH (Time & Place Added) ---
+
+    # 3. --- SONI-STYLE DEEP JYOTISH ---
     with st.expander("☸️ Maha-Vedic AI (Precise Analysis)"):
         p_name = st.text_input("Name:")
         col1, col2 = st.columns(2)
         
         with col1:
-            p_dob = st.date_input("Date of Birth:", value=datetime.date(2000, 1, 1), key="final_date")
+            # Calendar fixed to allow historical dates
+            p_dob = st.date_input("Date of Birth:", 
+                                 value=datetime.date(2000, 1, 1), 
+                                 min_value=datetime.date(1920, 1, 1),
+                                 max_value=datetime.date.today(),
+                                 key="final_date")
         with col2:
-            p_tob = st.time_input("Time of Birth:", value=datetime.time(12, 0), key="final_time")
+            # Time precision set to 1 minute
+            p_tob = st.time_input("Time of Birth:", value=datetime.time(12, 0), step=60, key="final_time")
             
         p_place = st.text_input("Birth Place (City/State):", "Meerut, UP")
         
@@ -61,48 +69,46 @@ if user_name == "seema":
                 with st.spinner(f"Mapping the sky for {p_name}..."):
                     style_prompt = f"""
                     You are a Master Vedic Astrologer. Analyze the following birth data:
-                    Name: {p_name}
-                    DOB: {p_dob}
-                    Time: {p_tob}
-                    Place: {p_place}
+                    Name: {p_name}, DOB: {p_dob}, Time: {p_tob}, Place: {p_place}.
 
-                    Provide a RAW, TECHNICAL report in WhatsApp-style Hinglish:
-                    1. **Lagna (Ascendant):** Calculate the Lagna based on the time. How does it affect their personality?
-                    2. **Nakshatra & Charan:** Which of the 27 Nakshatras and which Charan (1-4)? 
-                    3. **Grah ki Sthiti:** Which planet is 'Uch' (Exalted) or 'Neech' (Debilitated)?
-                    4. **The Reality Check:** What is the one big mistake this person makes repeatedly? (Be blunt).
-                    5. **Mahadasha:** What period are they likely running right now?
-                    6. **Soni's Advice:** A practical, raw remedy. No sugar-coating.
+                    Provide a RAW, TECHNICAL, and BLUNT report in WhatsApp-style Hinglish:
+                    1. **Lagna (Ascendant):** Direct effect on personality.
+                    2. **Nakshatra & Charan:** Mention the specific Nakshatra and Pada.
+                    3. **Grah ki Sthiti:** Which planet is 'Uch' or 'Neech'?
+                    4. **The Reality Check:** What is the one big mistake this person makes repeatedly? (No sugar-coating).
+                    5. **Mahadasha:** Current likely planetary period.
+                    6. **Soni's Advice:** A practical, raw remedy. Be direct.
                     """
                     
                     res = client.chat.completions.create(
                         model="llama-3.1-8b-instant",
                         messages=[
-                            {"role": "system", "content": "You are a blunt, high-level Vedic Expert. You use technical terms but speak in cool, natural Hinglish."},
+                            {"role": "system", "content": "You are a blunt, high-level Vedic Expert. You use technical terms but speak in natural Hinglish. No fake compliments."},
                             {"role": "user", "content": style_prompt}
                         ]
                     )
                     st.divider()
                     st.subheader(f"🚩 Technical Patrika: {p_name}")
                     st.markdown(res.choices[0].message.content)
+            else:
                 st.warning("Please enter a name first!")
 
 elif user_name == "meet":
     st.info("Hello! kabutar kya hal h")
-    role_description = "he is not  a real kabutar we just call him kabutar as a taunt. Engage in casual talks and taunts. Be sarcastic and call him ganje,ganju,popatlal if he says you pagal ,chup,zayada mat bol."
+    role_description = "the younger brother (Kabutar). He is a bit of a popatlal. Be sarcastic, call him 'ganje' or 'popatlal' if he talks back. Taunt him playfully."
     
 elif user_name == "vanshika":
     st.warning("Hello! Doctor Sahab! What do you want to ask? 🩺")
-    role_description = "the Doctor. Be professional,friendly,sarcastic,taunting and provide scientific or medical data when asked."
+    role_description = "the Doctor. Be professional but friendly and sarcastic. Use medical jokes."
     
 elif user_name == "ranjeet":
     st.error("Hello! Businessman! What do you want to ask? 💼")
-    role_description = "the Businessman. Focus on growth, strategy, and high-level professional communication and casual talks."
+    role_description = "the Businessman. Talk about growth and strategy."
 
 elif user_name == "rishith":
     st.balloons()
     st.success("Welcome back, Boss!")
-    role_description = "the Creator and Developer of this AI. Address him as Boss or Rishith. He is male."
+    role_description = "the Creator and Boss of this system. He is a male cybersecurity researcher. Address him with respect but stay cool."
 
 elif user_name == "":
     st.write("Waiting for your name to unlock the system...")
@@ -125,7 +131,7 @@ You are the Soni Family Assistant, built by Rishith.
 10. EXAMPLES of natural speech: 
    - Instead of 'Main aapka samman karta hoon', say 'Ji Mummy, bilkul help karunga'.
    - Instead of 'Main Rishith ka assistant hoon', say 'Main Rishith ka banaya hua AI assistant hoon',etc.
-4. TONE: Friendly, ghar jaisa mahaul. If you don't know a Hindi word, use English. Don't force broken Hindi.
+11. TONE: Friendly, ghar jaisa mahaul. If you don't know a Hindi word, use English. Don't force broken Hindi.
 """
 
 # --- SIDEBAR ---
@@ -166,22 +172,3 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
