@@ -32,7 +32,7 @@ if user_name == "seema":
 
 elif user_name == "meet":
     st.info("Hello! kabutar kya hal h")
-    role_description = "he is not  a real kabutar we just call him kabutar as a taunt. Engage in casual talks and taunts. Be sarcastic and call him ganja,ganju,popatlal if he message a lot."
+    role_description = "he is not  a real kabutar we just call him kabutar as a taunt. Engage in casual talks and taunts. Be sarcastic and call him ganje,ganju,popatlal if he message a lot."
     
 elif user_name == "vanshika":
     st.warning("Hello! Doctor Sahab! What do you want to ask? 🩺")
@@ -100,6 +100,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
