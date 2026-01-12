@@ -44,33 +44,49 @@ if user_name == "seema":
                               {"role": "user", "content": f"Give a positive daily prediction for {selected_rashi}."}]
                 )
                 st.markdown(astro_res.choices[0].message.content)
-
-    # 3. --- NEW: VEDIC KUNDLI ANALYST ---
-    with st.expander("☸️ Vedic Family Kundli Analyst"):
-        st.write("Enter details to analyze a family member's nature and future.")
-        p_name = st.text_input("Person's Name:")
-        p_dob = st.date_input("Date of Birth:", min_value=None)
+# 3. --- UPDATED: RAW VEDIC ANALYST ---
+    with st.expander("☸️ Raw Vedic Kundli Analyst (Real & Honest)"):
+        st.write("⚠️ Warning: This gives honest pros and cons. No sugar-coating.")
+        p_name = st.text_input("Name of Person:")
         
-        if st.button("Analyze Kundli"):
+        # Fixing the Date of Birth "Time Machine"
+        import datetime
+        today = datetime.date.today()
+        p_dob = st.date_input(
+            "Date of Birth:", 
+            value=datetime.date(2000, 1, 1), 
+            min_value=datetime.date(1920, 1, 1), 
+            max_value=today
+        )
+        
+        if st.button("Generate Real Analysis"):
             if p_name:
-                with st.spinner(f"Analyzing {p_name}'s Kundli..."):
-                    kundli_prompt = f"""
-                    Act as a professional Vedic Astrologer. Analyze the birth date {p_dob} for a person named {p_name}.
-                    Provide the following in respectful Hinglish:
-                    1. General Nature (Swabhav)
-                    2. Strengths (Pros/Mazbooti)
-                    3. Challenges (Cons/Saavdhani)
-                    4. A small remedy (Upay) like a mantra or color.
-                    Keep it positive and helpful for a family environment.
+                with st.spinner(f"Reading the stars for {p_name}..."):
+                    raw_kundli_prompt = f"""
+                    Act as a strict, traditional Vedic Astrologer and Numerologist. 
+                    Analyze the birth date {p_dob} for {p_name}. 
+                    Speak in direct, raw, and honest Hinglish. Do not sugar-coat.
+                    
+                    Provide the following sections:
+                    1. **Asli Swabhav (The Core):** Who are they really when no one is watching?
+                    2. **Mazbooti (Pros):** Their real strengths.
+                    3. **Kamzori aur Dosha (Cons):** Their ego, anger, laziness, or bad habits. What stops them?
+                    4. **Savdhani (Warnings):** What should they avoid in life/business?
+                    5. **Kadhwa Sach (The Bitter Truth):** One direct piece of advice they might not want to hear.
                     """
-                    kundli_res = client.chat.completions.create(
+                    
+                    res = client.chat.completions.create(
                         model="llama-3.1-8b-instant",
-                        messages=[{"role": "system", "content": "You are a professional Vedic Astrologer expert in Numerology and Kundli."},
-                                  {"role": "user", "content": kundli_prompt}]
+                        messages=[
+                            {"role": "system", "content": "You are a blunt, honest Vedic Astrologer. You tell the truth, even if it's bitter. Use natural Hinglish."},
+                            {"role": "user", "content": raw_kundli_prompt}
+                        ]
                     )
-                    st.write("---")
-                    st.subheader(f"🚩 Analysis for {p_name}")
-                    st.markdown(kundli_res.choices[0].message.content)
+                    st.divider()
+                    st.subheader(f"🚩 Honest Patrika: {p_name}")
+                    st.markdown(res.choices[0].message.content)
+            else:
+                st.warning("Pehle naam toh likho, Boss!")
             else:
                 st.warning("Please enter a name first!")
 
@@ -150,6 +166,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
