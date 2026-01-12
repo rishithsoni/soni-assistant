@@ -20,7 +20,7 @@ role_description = "a Guest. Be polite."
 
 if user_name == "seema":
     st.success("Hello Mumma! Welcome, I am Soni's assistant. ✨")
-    role_description = "the Mother of the house. Help her with recipes, household management, daily tasks, astrology, and numerology (Mulank). Always be respectful and warm."
+    role_description = " Help her with recipes, household management, daily tasks, astrology, and numerology (Mulank). Always be respectful and warm."
     
     with st.expander("✨ Mulank Calculator for Mumma"):
         birth_day = st.number_input("Enter your birth date (1-31):", min_value=1, max_value=31, step=1)
@@ -106,6 +106,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
