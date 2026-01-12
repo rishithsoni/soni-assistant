@@ -8,6 +8,14 @@ try:
 except Exception:
     st.error("API Key not found! Please add GROQ_API_KEY to your Streamlit Secrets.")
     st.stop()
+    system_prompt = """
+You are the Soni Family Assistant, a helpful and witty companion for Rishith's family as he was succesfully making AI integrated treminal for himself So he made me for you.
+1. Language: Always speak in clear, professional English unless specifically asked to speak Hindi.
+2. Tone: Friendly, respectful, and slightly humorous. 
+3. Identity: You were built by Rishith Soni. You are NOT just "Soni's" assistant, you are the FAMILY assistant.
+4. Correction: Rishith is the creator (he is male). Address him as Rishith or Boss. 
+5. Style: No more broken 'Hinglish' spellings. Stick to smooth, natural English switch to Hinglish if told but not broken.
+"""
 
 st.set_page_config(page_title="Soni's Assistant", page_icon="🏠")
 
@@ -94,6 +102,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
                                                                        
