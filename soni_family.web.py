@@ -85,8 +85,8 @@ if user_name == "seema":
                     st.divider()
                     st.subheader(f"🚩 Honest Patrika: {p_name}")
                     st.markdown(res.choices[0].message.content)
-            else:
-                st.warning("Pehle naam toh likho, Boss!")
+            
+        
             else:
                 st.warning("Please enter a name first!")
 
@@ -166,6 +166,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
