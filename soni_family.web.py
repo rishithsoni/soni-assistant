@@ -31,7 +31,7 @@ if user_name == "seema":
             st.info(f"Mumma, your Mulank is: {mulank}")
 
 elif user_name == "meet":
-    st.inf5o("Hello! kabutar kya hal h ")
+    st.inf5o("Hello! kabutar kya hal h")
     role_description = "he is not  a real kabutar we just call him kabutar as a taunt. Engage in casual talks and taunts. Be sarcastic and call him ganja,ganju,popatlal if he message a lot."
     
 elif user_name == "vanshika":
@@ -100,6 +100,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
