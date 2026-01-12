@@ -20,15 +20,59 @@ role_description = "a Guest. Be polite."
 
 if user_name == "seema":
     st.success("Hello Mumma! Welcome, I am Soni's assistant. ✨")
-    role_description = " Help her with recipes, household management, daily tasks, astrology, and numerology (Mulank). Always be respectful and warm."
+    role_description = "the Mother of the house. You are a respectful Vedic Astrologer for her. Help her with family kundli analysis, recipes, and daily tasks."
     
-    with st.expander("✨ Mulank Calculator for Mumma"):
-        birth_day = st.number_input("Enter your birth date (1-31):", min_value=1, max_value=31, step=1)
-        if st.button("Calculate Mulank"):
+    # 1. --- MULANK SECTION ---
+    with st.expander("✨ Personal Mulank Calculator"):
+        birth_day = st.number_input("Enter your birth date (1-31):", min_value=1, max_value=31, step=1, key="mumma_mulank")
+        if st.button("Calculate My Mulank"):
             mulank = birth_day if birth_day < 10 else (birth_day // 10 + birth_day % 10)
-            if mulank > 9:
-                mulank = mulank // 10 + mulank % 10
+            if mulank > 9: mulank = mulank // 10 + mulank % 10
             st.info(f"Mumma, your Mulank is: {mulank}")
+
+    # 2. --- DAILY RASHIFAL ---
+    with st.expander("🔮 Daily Rashifal (Zodiac)"):
+        zodiac_signs = ["Mesh (Aries)", "Vrishabha (Taurus)", "Mithun (Gemini)", "Karka (Cancer)", 
+                        "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)", 
+                        "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"]
+        selected_rashi = st.selectbox("Select Rashi:", zodiac_signs)
+        if st.button("Get Today's Prediction"):
+            with st.spinner("Graho ki dasha check kar raha hoon..."):
+                astro_res = client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[{"role": "system", "content": "You are a wise Vedic Astrologer. Speak in respectful Hinglish."},
+                              {"role": "user", "content": f"Give a positive daily prediction for {selected_rashi}."}]
+                )
+                st.markdown(astro_res.choices[0].message.content)
+
+    # 3. --- NEW: VEDIC KUNDLI ANALYST ---
+    with st.expander("☸️ Vedic Family Kundli Analyst"):
+        st.write("Enter details to analyze a family member's nature and future.")
+        p_name = st.text_input("Person's Name:")
+        p_dob = st.date_input("Date of Birth:", min_value=None)
+        
+        if st.button("Analyze Kundli"):
+            if p_name:
+                with st.spinner(f"Analyzing {p_name}'s Kundli..."):
+                    kundli_prompt = f"""
+                    Act as a professional Vedic Astrologer. Analyze the birth date {p_dob} for a person named {p_name}.
+                    Provide the following in respectful Hinglish:
+                    1. General Nature (Swabhav)
+                    2. Strengths (Pros/Mazbooti)
+                    3. Challenges (Cons/Saavdhani)
+                    4. A small remedy (Upay) like a mantra or color.
+                    Keep it positive and helpful for a family environment.
+                    """
+                    kundli_res = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[{"role": "system", "content": "You are a professional Vedic Astrologer expert in Numerology and Kundli."},
+                                  {"role": "user", "content": kundli_prompt}]
+                    )
+                    st.write("---")
+                    st.subheader(f"🚩 Analysis for {p_name}")
+                    st.markdown(kundli_res.choices[0].message.content)
+            else:
+                st.warning("Please enter a name first!")
 
 elif user_name == "meet":
     st.info("Hello! kabutar kya hal h")
@@ -106,6 +150,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
