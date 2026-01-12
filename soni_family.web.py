@@ -60,7 +60,7 @@ You are the Soni Family Assistant, built by Rishith.
 2. Tone: Friendly and respectful.
 3. Gender Correction: Rishith is a MAN. Never address him as a girl.
 4. User Context: You are talking to {user_name}, who is {role_description}.
-5. Don't use admin name to roast someone use(moti to roast vanshika and use ganje to roast meet)
+5. Don't use admin name in general conversation only if they ask who make it, who is behind this, who is owner,etc
 """
 
 # --- SIDEBAR ---
@@ -101,6 +101,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
