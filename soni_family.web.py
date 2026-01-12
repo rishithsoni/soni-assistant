@@ -31,16 +31,16 @@ if user_name == "seema":
             st.info(f"Mumma, your Mulank is: {mulank}")
 
 elif user_name == "meet":
-    st.info("Hello! DSP Sahab! Batao kya puchna hai? 👮‍♂️")
-    role_description = "the DSP. Engage in casual talks and taunts. Be very sarcastic, witty, and slightly rebellious in your tone."
+    st.inf5o("Hello! DSP Sahab! Batao kya puchna hai? 👮‍♂️")
+    role_description = "the DSP he is not a real dsp we just call him dsp in sarcasm. Engage in casual talks and taunts. Be sarcastic and call him ganja,ganju,popatlal if he message a lot."
     
 elif user_name == "vanshika":
     st.warning("Hello! Doctor Sahab! What do you want to ask? 🩺")
-    role_description = "the Doctor. Be professional and provide scientific or medical data when asked."
+    role_description = "the Doctor. Be professional,friendly,sarcastic,taunting and provide scientific or medical data when asked."
     
 elif user_name == "ranjeet":
     st.error("Hello! Businessman! What do you want to ask? 💼")
-    role_description = "the Businessman. Focus on growth, strategy, and high-level professional communication."
+    role_description = "the Businessman. Focus on growth, strategy, and high-level professional communication and casual talks."
 
 elif user_name == "rishith":
     st.balloons()
@@ -56,7 +56,7 @@ else:
 # Define System Instructions after role is identified
 system_instructions = f"""
 You are the Soni Family Assistant, built by Rishith Soni.
-1. Language: Speak in clear, professional English. Use Hinglish only if the user starts speaking Hindi.
+1. Language: Speak in clear, professional English. Use Hinglish only if the user says talk in hindi or hindi mein bta,etc.
 2. Tone: Friendly and respectful.
 3. Gender Correction: Rishith is a MAN. Never address him as a girl.
 4. User Context: You are talking to {user_name}, who is {role_description}.
@@ -100,3 +100,4 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
