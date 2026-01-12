@@ -44,48 +44,37 @@ if user_name == "seema":
                               {"role": "user", "content": f"Give a positive daily prediction for {selected_rashi}."}]
                 )
                 st.markdown(astro_res.choices[0].message.content)
-# 3. --- UPDATED: RAW VEDIC ANALYST ---
-    with st.expander("☸️ Raw Vedic Kundli Analyst (Real & Honest)"):
-        st.write("⚠️ Warning: This gives honest pros and cons. No sugar-coating.")
-        p_name = st.text_input("Name of Person:")
+# 3. --- MAHA-JYOTISH AI (Technical Vedic Analysis) ---
+    with st.expander("☸️ Maha-Vedic AI (Nakshatra & Grah Analysis)"):
+        p_name = st.text_input("Name for deep analysis:")
+        p_dob = st.date_input("Date of Birth:", value=datetime.date(2000, 1, 1), key="deep_astro")
         
-        # Fixing the Date of Birth "Time Machine"
-        import datetime
-        today = datetime.date.today()
-        p_dob = st.date_input(
-            "Date of Birth:", 
-            value=datetime.date(2000, 1, 1), 
-            min_value=datetime.date(1920, 1, 1), 
-            max_value=today
-        )
-        
-        if st.button("Generate Real Analysis"):
+        if st.button("Calculate Maha-Kundli"):
             if p_name:
-                with st.spinner(f"Reading the stars for {p_name}..."):
-                    raw_kundli_prompt = f"""
-                    Act as a strict, traditional Vedic Astrologer and Numerologist. 
+                with st.spinner(f"Calculating Nakshatras for {p_name}..."):
+                    maha_prompt = f"""
+                    You are an expert Vedic Astrologer specializing in Nakshatras and planetary degrees.
                     Analyze the birth date {p_dob} for {p_name}. 
-                    Speak in direct, raw, and honest Hinglish. Do not sugar-coat.
+                    Provide a RAW and REAL technical report in Hinglish:
                     
-                    Provide the following sections:
-                    1. **Asli Swabhav (The Core):** Who are they really when no one is watching?
-                    2. **Mazbooti (Pros):** Their real strengths.
-                    3. **Kamzori aur Dosha (Cons):** Their ego, anger, laziness, or bad habits. What stops them?
-                    4. **Savdhani (Warnings):** What should they avoid in life/business?
-                    5. **Kadhwa Sach (The Bitter Truth):** One direct piece of advice they might not want to hear.
+                    1. **Nakshatra & Pada:** Identify the likely Nakshatra and its 1-4 Pada based on the date.
+                    2. **Rashi Lord (Lagan):** Who is the ruling planet and how is it behaving?
+                    3. **Grah Dasha:** Mention the current likely Mahadasha influence (e.g., Rahu-Kaal or Shani-Dhaiya).
+                    4. **The Shadow (Dosha):** Mention any Mangal, Kaal Sarp, or Pitra Dosha vibes.
+                    5. **Career & Money:** Real talk—will they be rich or struggle? Leader or worker?
+                    6. **Upay (Remedy):** A specific ritual or stone based on their Nakshatra.
                     """
                     
                     res = client.chat.completions.create(
                         model="llama-3.1-8b-instant",
                         messages=[
-                            {"role": "system", "content": "You are a blunt, honest Vedic Astrologer. You tell the truth, even if it's bitter. Use natural Hinglish."},
-                            {"role": "user", "content": raw_kundli_prompt}
+                            {"role": "system", "content": "You are a professional Maha-Jyotish. You use technical Vedic terms like Ashwini, Rohini, Revati, etc. You tell the raw truth."},
+                            {"role": "user", "content": maha_prompt}
                         ]
                     )
                     st.divider()
-                    st.subheader(f"🚩 Honest Patrika: {p_name}")
+                    st.subheader(f"🚩 Maha-Analysis: {p_name}")
                     st.markdown(res.choices[0].message.content)
-            
         
             else:
                 st.warning("Please enter a name first!")
@@ -166,6 +155,7 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
