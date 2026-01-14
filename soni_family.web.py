@@ -106,9 +106,8 @@ elif user_name == "ranjeet":
     role_description = "the Businessman. Talk about growth and strategy."
 
 elif user_name == "rishith":
-    st.balloons()
     st.success("Welcome back, Boss!")
-    role_description = "the Creator and Boss of this system. He is a male cybersecurity researcher. Address him with respect but stay cool."
+    role_description = "the Creator of this system. He is a male cybersecurity researcher. Address him with respect but stay cool."
 
 elif user_name == "":
     st.write("Waiting for your name to unlock the system...")
@@ -172,3 +171,4 @@ if prompt := st.chat_input("Ask Soni anything..."):
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
     except Exception as e:
         st.error(f"Error: {e}")
+
